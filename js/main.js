@@ -14,15 +14,24 @@
 
       this.stop = document.createElement('div');
       this.stop.textContent = 'STOP';
-      this.stop.classList.add('STOP');
+      this.stop.classList.add('stop', 'inactive');
       // stopボタンのクリックイベントを指定
       this.stop.addEventListener('click', () => {
+        // Stopボタン押すとそれ以降の処理はできない
+        if (this.stop.classList.contains('inactive')) {
+          return;
+        }
+        this.stop.classList.add('inactive');
+
         clearTimeout(this.timeoutId);
 
         panelsLeft--;
 
         if (panelsLeft === 0) {
           checkResult();
+          // ゲームのリセット処理
+          spin.classList.remove('inactive');
+          panelsLeft = 3;
         }
       });
 
@@ -54,6 +63,19 @@
         this.spin();
       }, 50);
     }
+
+    isUnmatched(p1, p2) {
+      return this.img.src !== p1.img.src && this.img.src !== p2.img.src;
+    }
+
+    unmatch() {
+      this.img.classList.add('unmatched');
+    }
+
+    activate() {
+      this.img.classList.remove('unmatched');
+      this.stop.classList.remove('inactive');
+    }
   }
   // パネルに対する処理
   function checkResult() {
@@ -80,8 +102,15 @@
   // spinボタンにクリックイベント設定
   const spin = document.getElementById('spin');
   spin.addEventListener('click', () => {
+    // spinボタンを押すとそれ以降の処理はできない
+    if (spin.classList.contains('inavtive')) {
+      return;
+    }
+    spin.classList.add('inactive');
+
     // forEachを使ってパネルの画像を切り替える
     panels.forEach(panel => {
+      panel.activate();
       panel.spin();
     });
   });

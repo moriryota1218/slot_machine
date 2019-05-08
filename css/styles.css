@@ -56,3 +56,11 @@ main {
   user-select: none;
   margin: 0 auto;
 }
+
+.unmatched {
+  opacity: 0.5;
+}
+
+.inactive {
+  opacity: 0.5;
+}
